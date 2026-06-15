@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Entity File</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1 id="title">LOADING...</h1>
+    <p id="classTag">CLASSIFICATION: ...</p>
+</header>
+
+<div class="file">
+    <h2>ENTITY FILE</h2>
+    <p id="description"></p>
+
+    <h3>FULL DOCUMENT</h3>
+    <p id="content"></p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        // 🔴 paste your Firebase config here
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Get ID from URL (example: entry.html?id=CPE-001)
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function loadEntry() {
+        if (!id) return;
+
+        const docRef = doc(db, "entities", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+
+            document.getElementById("title").textContent = data.title;
+            document.getElementById("classTag").textContent = "CLASSIFICATION: " + data.classification;
+            document.getElementById("description").textContent = data.description;
+            document.getElementById("content").textContent = data.content;
+        } else {
+            document.getElementById("title").textContent = "ENTITY NOT FOUND";
+        }
+    }
+
+    loadEntry();
+</script>
+
+</body>
+</html>
