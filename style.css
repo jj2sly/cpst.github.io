@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    color: black;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    border-bottom: 5px solid #b30000;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 3rem;
+}
+
+header p {
+    color: #b30000;
+    font-weight: bold;
+}
+
+.file {
+    border: 2px solid black;
+    padding: 20px;
+}
+
+h2 {
+    border-bottom: 2px solid black;
+    padding-bottom: 5px;
+}
+
+h3 {
+    margin-top: 25px;
+}
