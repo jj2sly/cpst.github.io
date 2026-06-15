@@ -1,139 +1,114 @@
 body {
     font-family: Arial, sans-serif;
-    background: white;
-    color: black;
-    max-width: 900px;
+    background: #0f0f0f;   /* deep black */
+    color: #f5f5f5;
+    max-width: 1000px;
     margin: auto;
     padding: 20px;
 }
 
+/* HEADER */
 header {
-    border-bottom: 5px solid #b30000;
-    margin-bottom: 30px;
+    border-bottom: 5px solid #f2c200; /* yellow */
+    margin-bottom: 20px;
 }
 
 header h1 {
     margin: 0;
     font-size: 3rem;
+    color: #f2c200;
 }
 
 header p {
-    color: #b30000;
+    color: #f2c200;
     font-weight: bold;
 }
 
-.file {
-    border: 2px solid black;
+/* WARNING BANNER */
+.warning {
+    background: #f2c200;
+    color: black;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* MAIN BOX */
+.database {
+    background: #1a1a1a;
+    border: 2px solid #f2c200;
     padding: 20px;
 }
 
+/* ENTRIES */
+.entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.entry a {
+    text-decoration: none;
+    color: #f5f5f5;
+    font-weight: bold;
+}
+
+.entry a:hover {
+    color: #f2c200;
+}
+
+/* ENTRY BOX */
+.file {
+    border: 2px solid #f2c200;
+    padding: 20px;
+    background: #141414;
+}
+
+/* HEADINGS */
 h2 {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #f2c200;
     padding-bottom: 5px;
+    color: #f2c200;
 }
 
 h3 {
     margin-top: 25px;
+    color: #f5f5f5;
 }
 
-body{
-    background:#f3f3f3;
-    color:black;
-    font-family:Arial,sans-serif;
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
+/* CLASS TAGS */
+.class {
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: black;
+    font-weight: bold;
 }
 
-header{
-    border-bottom:5px solid #b30000;
-    margin-bottom:20px;
+/* POWER LEVELS (your new system) */
+.cosmic {
+    background: #b38b00;
 }
 
-header h1{
-    margin:0;
-    font-size:3rem;
+.earthly {
+    background: #f2c200;
 }
 
-header p{
-    color:#b30000;
-    font-weight:bold;
+.local {
+    background: #ffda44;
 }
 
-.warning{
-    background:#b30000;
-    color:white;
-    text-align:center;
-    padding:10px;
-    font-weight:bold;
-    margin-bottom:20px;
+.seldom {
+    background: #666;
+    color: white;
 }
 
-.database{
-    background:white;
-    border:2px solid black;
-    padding:20px;
-}
-
-.entry{
-    display:flex;
-    justify-content:space-between;
-    padding:10px;
-    border-bottom:1px solid #ddd;
-}
-
-.entry a{
-    text-decoration:none;
-    color:black;
-    font-weight:bold;
-}
-
-.entry a:hover{
-    color:#b30000;
-}
-
-.class{
-    padding:4px 10px;
-    border-radius:3px;
-    font-size:0.8rem;
-    color:white;
-}
-
-.safe{
-    background:#2e8b57;
-}
-
-.euclid{
-    background:#e69500;
-}
-
-.keter{
-    background:#b30000;
-}
-
-.cosmic{
-    background:#6f00ff;
-    color:white;
-}
-
-.earthly{
-    background:#e69500;
-    color:white;
-}
-
-.local{
-    background:#2e8b57;
-    color:white;
-}
-
-.seldom{
-    background:#555;
-    color:white;
-}
-
-.legend{
-    background:white;
-    border:2px solid black;
-    padding:15px;
-    margin-bottom:20px;
+/* LEGEND BOX */
+.legend {
+    background: #1a1a1a;
+    border: 2px solid #f2c200;
+    padding: 15px;
+    margin-bottom: 20px;
 }
