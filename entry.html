@@ -44,24 +44,6 @@
     const id = params.get("id");
 
     async function loadEntry() {
-        if (!id) return;
-
-        const docRef = doc(db, "entities", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-
-            document.getElementById("title").textContent = data.title;
-            document.getElementById("classTag").textContent = "CLASSIFICATION: " + data.classification;
-            document.getElementById("description").textContent = data.description;
-            document.getElementById("content").textContent = data.content;
-        } else {
-            document.getElementById("title").textContent = "ENTITY NOT FOUND";
-        }
-    }
-
-    async function loadEntry() {
     console.log("ID:", id);
 
     const docRef = doc(db, "entities", id);
