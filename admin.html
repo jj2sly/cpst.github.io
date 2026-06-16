@@ -35,9 +35,11 @@
 </select>
 <br><br>
 
-    <textarea id="description" placeholder="Description"></textarea><br><br>
+    <textarea id="description" placeholder="Description"></textarea>
 
-    <textarea id="content" placeholder="Full Document"></textarea><br><br>
+    <textarea id="containmentProcedures" placeholder="Containment Procedures"></textarea>
+
+    <textarea id="addendum" placeholder="Addendum"></textarea>
 
     <button id="submitBtn">Create Entity</button>
 
@@ -70,7 +72,9 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
         classification: document.getElementById("classification").value,
         containment: document.getElementById("containment").value,
         description: document.getElementById("description").value,
-        content: document.getElementById("content").value
+        description: document.getElementById("description").value,
+        containmentProcedures: document.getElementById("containmentProcedures").value,
+        addendum: document.getElementById("addendum").value
     });
 
     document.getElementById("status").textContent =
