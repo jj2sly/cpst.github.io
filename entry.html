@@ -9,6 +9,7 @@
 <header>
     <h1 id="title">LOADING...</h1>
     <p id="classTag">CLASSIFICATION: ...</p>
+    <p id="containmentTag">CONTAINMENT: ...</p>
 </header>
 
 <div class="file">
@@ -78,7 +79,9 @@
     document.getElementById("classTag").textContent = "CLASSIFICATION: " + (data.classification || "UNKNOWN");
     document.getElementById("description").textContent = data.description || "NO DESCRIPTION";
     document.getElementById("content").textContent = data.content || "NO CONTENT";
+    document.getElementById("containmentTag").textContent = "CONTAINMENT: " + (data.containment || "UNSPECIFIED");
 }
+    loadEntry();
 </script>
 
 </body>
