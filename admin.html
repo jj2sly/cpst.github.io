@@ -111,6 +111,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
     document.getElementById("status").textContent =
         "Entity successfully created.";
+    window.location.href = "index.html";
 
     // OPTIONAL: generate next ID immediately after submit
     const nextId = await generateNextCPE();
