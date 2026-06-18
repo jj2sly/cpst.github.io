@@ -66,13 +66,18 @@ let editing = false;
 onAuthStateChanged(auth, (user) => {
 
     if (!user) {
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+
         document.getElementById("editBtn").style.display = "none";
         document.getElementById("deleteBtn").style.display = "none";
 
         document.getElementById("description").readOnly = true;
         document.getElementById("containmentProcedures").readOnly = true;
         document.getElementById("addendum").readOnly = true;
+
+        window.location.href = "login.html";
     }
+
 });
 
 /* =========================
@@ -165,7 +170,6 @@ document.getElementById("deleteBtn").addEventListener("click", async () => {
 
     await deleteDoc(doc(db, "entities", id));
 
-    window.location.href = "index.html";
 });
 </script>
 
