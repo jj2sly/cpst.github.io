@@ -187,3 +187,21 @@ button:hover {
     background: #ffd400;
     color: black;
 }
+
+.redacted-normal {
+    color: #000;
+    background: #111;
+    padding: 0 4px;
+}
+
+.redacted-heavy {
+    color: #000;
+    background: #222;
+    border: 1px solid #444;
+}
+
+.redacted-cosmic {
+    color: #000;
+    background: #300;
+    text-shadow: 0 0 5px red;
+}
