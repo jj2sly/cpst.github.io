@@ -1,1 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artifact File</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<header>
+    <h1 id="number">LOADING...</h1>
+    <h2 id="title"></h2>
+    <input type="text" id="titleEdit" style="display:none;" placeholder="Artifact title">
+
+    <p id="classTag">CLASSIFICATION: ...</p>
+    <select id="classificationEdit" style="display:none;">
+        <option value="COSMIC">COSMIC</option>
+        <option value="EARTHLY">EARTHLY</option>
+        <option value="LOCAL">LOCAL</option>
+        <option value="SELDOM">CONSTRICTED</option>
+        <option value="NEUTRALIZED">NEUTRALIZED</option>
+    </select>
+</header>
+
+    <h2>PROPERTIES</h2>
+<div id="propertiesView" class="entryText"></div>
+<textarea id="propertiesEdit" class="entryText" style="display:none;"></textarea>
+
+    <h2>DESCRIPTION</h2>
+<div id="descriptionView" class="entryText"></div>
+<textarea id="descriptionEdit" class="entryText" style="display:none;"></textarea>
+
+<h2>CONTAINMENT / HANDLING PROCEDURES</h2>
+<div id="containmentView" class="entryText"></div>
+<textarea id="containmentEdit" class="entryText" style="display:none;"></textarea>
+
+<h2>ADDENDUM</h2>
+<div id="addendumView" class="entryText"></div>
+<textarea id="addendumEdit" class="entryText" style="display:none;"></textarea>
+
+<h2>ACTIVITY LOG</h2>
+<div id="activityLog"></div>
+
+<button id="editBtn">EDIT FILE</button>
+<button id="revealBtn" style="display:none;">REVEAL REDACTIONS</button>
+<button id="deleteBtn">DELETE FILE</button>
+
+<a href="artifacts.html" class="backBtn">⬅ BACK TO DATABASE</a>
+
+<p id="status"></p>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    updateDoc,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBshT0wE2kjCIPpt1BozZvLlY3kGwWEH90",
+    authDomain: "cpo-9af17.firebaseapp.com",
+    projectId: "cpo-9af17",
+    storageBucket: "cpo-9af17.firebasestorage.app",
+    messagingSenderId: "526427336111",
+    appId: "1:526427336111:web:8b71369117416ae937d35a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+let isEditMode = false;
+
+/* =========================
+   AUTH
+========================= */
+onAuthStateChanged(auth, (user) => {
+    const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+
+    if (!editBtn || !deleteBtn) return;
+
+    if (user) {
+        editBtn.style.display = "inline-block";
+        deleteBtn.style.display = "inline-block";
+
+        const revealBtn = document.getElementById("revealBtn");
+        if (revealBtn) {
+            revealBtn.style.display = "inline-block";
+        }
+    } else {
+        editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
+
+        const status = document.getElementById("status");
+        if (status) {
+            status.textContent = "ACCESS LEVEL REQUIRED TO EDIT";
+        }
+    }
+});
+
+/* =========================
+   REDACTIONS
+========================= */
+function applyRedactions(text) {
+    if (typeof text !== "string") return "";
+
+    return text
+        .replace(
+            /\/r!!(.*?)\/r!!/g,
+            `<span class="redacted-cosmic">████ COSMIC ERASED ████</span>`
+        )
+        .replace(
+            /\/r!(.*?)\/r!/g,
+            `<span class="redacted-heavy">██ CLASSIFIED ██</span>`
+        )
+        .replace(
+            /\/r(.*?)\/r/g,
+            `<span class="redacted-normal">███ REDACTED ███</span>`
+        );
+}
+
+/* =========================
+   PARAGRAPH FORMATTING
+========================= */
+function formatAsParagraphs(text) {
+    if (typeof text !== "string" || text.trim() === "") return "";
+
+    let chunks = text.split(/\n\s*\n/);
+    if (chunks.length === 1) {
+        chunks = text.split(/\n/);
+    }
+
+    return chunks
+        .map(chunk => chunk.trim())
+        .filter(chunk => chunk.length > 0)
+        .map(chunk => `<p>${applyRedactions(chunk)}</p>`)
+        .join("");
+}
+
+/* =========================
+   LOAD ENTRY
+========================= */
+async function loadEntry() {
+
+    if (!id) {
+        document.getElementById("title").textContent =
+            "NO ARTIFACT ID PROVIDED";
+        return;
+    }
+
+    const docRef = doc(db, "artifacts", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+        document.getElementById("title").textContent =
+            "ARTIFACT NOT FOUND";
+        return;
+    }
+
+    const data = docSnap.data();
+    currentData = data;
+
+    console.log("ARTIFACT DATA:", data);
+
+    document.getElementById("number").textContent = id;
+
+    document.getElementById("title").textContent =
+        data.title || "UNTITLED ARTIFACT";
+
+    document.getElementById("classTag").textContent =
+        "CLASSIFICATION: " + (data.classification || "UNKNOWN");
+
+    document.getElementById("titleEdit").value =
+        data.title || "";
+
+    document.getElementById("classificationEdit").value =
+        (data.classification || "COSMIC").toUpperCase();
+
+    document.getElementById("propertiesView").innerHTML =
+        formatAsParagraphs(data.properties || "");
+
+    document.getElementById("descriptionView").innerHTML =
+        formatAsParagraphs(data.description || "");
+
+    document.getElementById("containmentView").innerHTML =
+        formatAsParagraphs(data.containmentProcedures || "");
+
+    document.getElementById("addendumView").innerHTML =
+        formatAsParagraphs(data.addendum || "");
+
+    document.getElementById("propertiesEdit").value =
+        data.properties || "";
+
+    document.getElementById("descriptionEdit").value =
+        data.description || "";
+
+    document.getElementById("containmentEdit").value =
+        data.containmentProcedures || "";
+
+    document.getElementById("addendumEdit").value =
+        data.addendum || "";
+
+    const logDiv = document.getElementById("activityLog");
+
+    if (!logDiv) {
+        console.warn("activityLog element missing in HTML");
+        return;
+    }
+
+    const logs = data.logs || [];
+
+    if (logs.length === 0) {
+        logDiv.innerHTML = "No activity recorded.";
+    } else {
+        logDiv.innerHTML = logs
+            .slice()
+            .reverse()
+            .map(log => `
+                <div class="logEntry">
+                    <strong>${log.date || "Unknown date"}</strong><br>
+                    ${log.message || "No message"}
+                </div>
+            `)
+            .join("");
+    }
+}
+
+/* =========================
+   EDIT MODE
+========================= */
+function toggleMode() {
+    isEditMode = !isEditMode;
+
+    const viewIds = [
+        "propertiesView",
+        "descriptionView",
+        "containmentView",
+        "addendumView"
+    ];
+
+    const editIds = [
+        "propertiesEdit",
+        "descriptionEdit",
+        "containmentEdit",
+        "addendumEdit"
+    ];
+
+    viewIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = isEditMode ? "none" : "block";
+    });
+
+    editIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = isEditMode ? "block" : "none";
+    });
+
+    document.getElementById("title").style.display =
+        isEditMode ? "none" : "block";
+    document.getElementById("titleEdit").style.display =
+        isEditMode ? "inline-block" : "none";
+
+    document.getElementById("classTag").style.display =
+        isEditMode ? "none" : "block";
+    document.getElementById("classificationEdit").style.display =
+        isEditMode ? "inline-block" : "none";
+
+    document.getElementById("editBtn").textContent =
+        isEditMode ? "SAVE CHANGES" : "EDIT FILE";
+}
+
+/* =========================
+   EDIT BUTTON
+========================= */
+document.getElementById("editBtn")?.addEventListener("click", async () => {
+
+    if (!isEditMode) {
+        toggleMode();
+        return;
+    }
+
+    await updateDoc(doc(db, "artifacts", id), {
+        title:
+            document.getElementById("titleEdit").value,
+
+        classification:
+            document.getElementById("classificationEdit").value,
+
+        properties:
+            document.getElementById("propertiesEdit").value,
+
+        description:
+            document.getElementById("descriptionEdit").value,
+
+        containmentProcedures:
+            document.getElementById("containmentEdit").value,
+
+        addendum:
+            document.getElementById("addendumEdit").value
+    });
+
+    document.getElementById("title").textContent =
+        document.getElementById("titleEdit").value || "UNTITLED ARTIFACT";
+
+    document.getElementById("classTag").textContent =
+        "CLASSIFICATION: " + document.getElementById("classificationEdit").value;
+
+    document.getElementById("status").textContent =
+        "Changes saved successfully.";
+
+    toggleMode();
+});
+
+/* =========================
+   DELETE BUTTON
+========================= */
+document.getElementById("deleteBtn")?.addEventListener("click", async () => {
+
+    const confirmed = confirm(
+        "TERMINATION PROTOCOL\n\nDelete this artifact permanently?"
+    );
+
+    if (!confirmed) return;
+
+    await deleteDoc(doc(db, "artifacts", id));
+
+    window.location.href = "artifacts.html";
+});
+
+/* =========================
+   START
+========================= */
+let redactionsRevealed = false;
+let currentData = null;
+
+document.getElementById("revealBtn")?.addEventListener("click", () => {
+
+    if (!currentData) return;
+
+    redactionsRevealed = !redactionsRevealed;
+
+    if (redactionsRevealed) {
+
+        document.getElementById("propertiesView").textContent =
+            currentData.properties || "";
+
+        document.getElementById("descriptionView").textContent =
+            currentData.description || "";
+
+        document.getElementById("containmentView").textContent =
+            currentData.containmentProcedures || "";
+
+        document.getElementById("addendumView").textContent =
+            currentData.addendum || "";
+
+        document.getElementById("revealBtn").textContent =
+            "HIDE REDACTIONS";
+
+    } else {
+
+        document.getElementById("propertiesView").innerHTML =
+            formatAsParagraphs(currentData.properties || "");
+
+        document.getElementById("descriptionView").innerHTML =
+            formatAsParagraphs(currentData.description || "");
+
+        document.getElementById("containmentView").innerHTML =
+            formatAsParagraphs(currentData.containmentProcedures || "");
+
+        document.getElementById("addendumView").innerHTML =
+            formatAsParagraphs(currentData.addendum || "");
+
+        document.getElementById("revealBtn").textContent =
+            "REVEAL REDACTIONS";
+    }
+});
+
+loadEntry();
+</script>
+
+</body>
+</html>
