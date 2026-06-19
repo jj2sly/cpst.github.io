@@ -28,6 +28,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, signInWithEmailAndPassword } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+import { setPersistence, browserLocalPersistence } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";   
+    
 const firebaseConfig = {
   apiKey: "AIzaSyBshT0wE2kjCIPpt1BozZvLlY3kGwWEH90",
   authDomain: "cpo-9af17.firebaseapp.com",
@@ -46,6 +49,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     const password = document.getElementById("password").value;
 
     try {
+        await setPersistence(auth, browserLocalPersistence);
         await signInWithEmailAndPassword(auth, email, password);
 
         document.getElementById("status").textContent =
