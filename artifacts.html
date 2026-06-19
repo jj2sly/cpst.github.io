@@ -33,7 +33,20 @@
     const container = document.getElementById("container");
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  async function loadClassificationColors() {
+      const colorMap = {};
+      const querySnapshot = await getDocs(collection(db, "classifications"));
+      querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const name = (data.name || docSnap.id).toUpperCase();
+          colorMap[name] = data.color || "#ffd400";
+      });
+      return colorMap;
+  }
+
   async function loadEntries() {
+  const colorMap = await loadClassificationColors();
   const querySnapshot = await getDocs(collection(db, "artifacts"));
   console.log("ARTIFACTS FOUND:", querySnapshot.size);
   if (!querySnapshot.size) {
@@ -46,10 +59,11 @@
     div.className = "entry";
     const title = data.title || "UNTITLED ARTIFACT";
     const classification = (data.classification || "UNKNOWN").toString();
-    const safeClass = classification.toLowerCase();
+    const upperClass = classification.toUpperCase();
+    const color = colorMap[upperClass] || "#888";
     div.innerHTML = `
       <a href="artifact-entry.html?id=${docSnap.id}">${title}</a>
-      <span class="class ${safeClass}">${classification}</span>
+      <span class="class" style="background:${color}; color:#000;">${classification}</span>
     `;
     container.appendChild(div);
   });
