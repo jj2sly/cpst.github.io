@@ -47,21 +47,21 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
-            console.log("LOGIN SUCCESS");
+
+        console.log("LOGIN SUCCESS");
 
         document.getElementById("status").textContent =
             "ACCESS GRANTED... redirecting";
 
         setTimeout(() => {
             window.location.href = "index.html";
-        }, 800);
+        }, 600);
 
     } catch (error) {
-    console.error("LOGIN ERROR:", error);
+        console.error(error);
 
-    document.getElementById("status").textContent =
-        error.code;
-}
+        document.getElementById("status").textContent =
+            error.code;
     }
 });
 </script>
