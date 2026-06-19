@@ -205,6 +205,7 @@ button:hover {
 .redacted-cosmic {
     background: black;
     color: black;
+    padding: 0 4px;
     text-shadow: 0 0 8px purple;
     font-weight: bold;
 }
