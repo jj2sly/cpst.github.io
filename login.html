@@ -54,6 +54,8 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 
         await signInWithEmailAndPassword(auth, email, password);
 
+        console.log("LOGIN SUCCESS USER:", result.user);
+
         document.getElementById("status").textContent =
             "ACCESS GRANTED... redirecting";
 
