@@ -107,8 +107,8 @@ async function loadEntry() {
     document.getElementById("containmentTag").textContent =
         "CONTAINMENT: " + (data.containment || "UNKNOWN");
 
-    document.getElementById("descriptionView").innerHTML =
-        applyRedactions(data.description || "");
+   document.getElementById("descriptionView").innerHTML =
+    data.description || "NO DATA LOADED";
 
     document.getElementById("containmentView").innerHTML =
         applyRedactions(data.containmentProcedures || "");
