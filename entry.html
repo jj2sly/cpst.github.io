@@ -25,6 +25,7 @@
 <textarea id="addendumEdit" class="entryText" style="display:none;"></textarea>
 
 <button id="editBtn">EDIT FILE</button>
+<button id="revealBtn" style="display:none;">REVEAL REDACTIONS</button>
 <button id="deleteBtn">DELETE FILE</button>
 
 <a href="index.html" class="backBtn">⬅ BACK TO DATABASE</a>
@@ -74,9 +75,14 @@ onAuthStateChanged(auth, (user) => {
     if (!editBtn || !deleteBtn) return;
 
     if (user) {
-        editBtn.style.display = "inline-block";
-        deleteBtn.style.display = "inline-block";
-    } else {
+    editBtn.style.display = "inline-block";
+    deleteBtn.style.display = "inline-block";
+
+    const revealBtn = document.getElementById("revealBtn");
+    if (revealBtn) {
+        revealBtn.style.display = "inline-block";
+    }
+} else {
         editBtn.style.display = "none";
         deleteBtn.style.display = "none";
 
@@ -129,7 +135,8 @@ async function loadEntry() {
     }
 
     const data = docSnap.data();
-
+    currentData = data;
+    
     console.log("ENTITY DATA:", data);
 
     document.getElementById("title").textContent =
@@ -238,6 +245,45 @@ document.getElementById("deleteBtn")?.addEventListener("click", async () => {
 /* =========================
    START
 ========================= */
+let redactionsRevealed = false;
+let currentData = null;
+
+document.getElementById("revealBtn")?.addEventListener("click", () => {
+
+    if (!currentData) return;
+
+    redactionsRevealed = !redactionsRevealed;
+
+    if (redactionsRevealed) {
+
+        document.getElementById("descriptionView").textContent =
+            currentData.description || "";
+
+        document.getElementById("containmentView").textContent =
+            currentData.containmentProcedures || "";
+
+        document.getElementById("addendumView").textContent =
+            currentData.addendum || "";
+
+        document.getElementById("revealBtn").textContent =
+            "HIDE REDACTIONS";
+
+    } else {
+
+        document.getElementById("descriptionView").innerHTML =
+            applyRedactions(currentData.description || "");
+
+        document.getElementById("containmentView").innerHTML =
+            applyRedactions(currentData.containmentProcedures || "");
+
+        document.getElementById("addendumView").innerHTML =
+            applyRedactions(currentData.addendum || "");
+
+        document.getElementById("revealBtn").textContent =
+            "REVEAL REDACTIONS";
+    }
+});
+    
 loadEntry();
 </script>
 
