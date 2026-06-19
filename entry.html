@@ -170,26 +170,30 @@ async function loadEntry() {
         data.containmentProcedures || "";
 
     document.getElementById("addendumEdit").value =
-        data.addendum || "";
+    data.addendum || "";
+
+const logDiv = document.getElementById("activityLog");
+
+if (logDiv) {
+
+    if (data.logs && data.logs.length) {
+
+        logDiv.innerHTML = data.logs
+            .slice()
+            .reverse()
+            .map(log => `
+                <div class="logEntry">
+                    <strong>${log.date}</strong><br>
+                    ${log.message}
+                </div>
+            `)
+            .join("");
+
+    } else {
+
+        logDiv.innerHTML = "No activity recorded.";
+    }
 }
-    const logDiv = document.getElementById("activityLog");
-
-if (data.logs && data.logs.length) {
-
-    logDiv.innerHTML = data.logs
-        .slice()
-        .reverse()
-        .map(log => `
-            <div class="logEntry">
-                <strong>${log.date}</strong><br>
-                ${log.message}
-            </div>
-        `)
-        .join("");
-
-} else {
-
-    logDiv.innerHTML = "No activity recorded.";
 }
 
 /* =========================
