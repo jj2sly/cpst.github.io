@@ -100,20 +100,48 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
     const docId = document.getElementById("docId").value;
 
-    await setDoc(doc(db, "entities", docId), {
-    title: document.getElementById("title").value,
-    classification: document.getElementById("classification").value,
-    containment: document.getElementById("containment").value,
-    description: document.getElementById("description").value,
-    containmentProcedures: document.getElementById("containmentProcedures").value,
-    addendum: document.getElementById("addendum").value,
+    const ref = doc(db, "entities", id);
+const snap = await getDoc(ref);
 
-    logs: [
-        {
-            date: new Date().toLocaleString(),
-            message: "Entity file created."
-        }
-    ]
+const oldData = snap.data();
+
+const newData = {
+    description: document.getElementById("descriptionEdit").value,
+    containmentProcedures: document.getElementById("containmentEdit").value,
+    addendum: document.getElementById("addendumEdit").value
+};
+
+let logs = oldData.logs || [];
+
+function addLog(message) {
+    logs.push({
+        date: new Date().toLocaleString(),
+        message
+    });
+}
+
+// Compare fields and generate smart logs
+
+if (oldData.description !== newData.description) {
+    addLog("Description modified.");
+}
+
+if (oldData.containmentProcedures !== newData.containmentProcedures) {
+    addLog("Containment procedures updated.");
+}
+
+if (oldData.addendum !== newData.addendum) {
+    addLog("Addendum modified.");
+}
+
+// fallback if nothing changed
+if (logs.length === (oldData.logs?.length || 0)) {
+    addLog("No structural changes detected.");
+}
+
+await updateDoc(ref, {
+    ...newData,
+    logs: logs
 });
 
     document.getElementById("status").textContent =
