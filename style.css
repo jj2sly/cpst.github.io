@@ -114,7 +114,7 @@ h3 {
 
 /* POWER LEVELS */
 .cosmic {
-    background: #FF0000;
+    background: #9820C5;
 }
 
 .earthly {
@@ -205,6 +205,6 @@ button:hover {
 .redacted-cosmic {
     background: black;
     color: black;
-    text-shadow: 0 0 8px red;
+    text-shadow: 0 0 8px purple;
     font-weight: bold;
 }
