@@ -48,29 +48,34 @@
   const db = getFirestore(app);
 
   async function loadEntries() {
-    const querySnapshot = await getDocs(collection(db, "entities"));
+  const querySnapshot = await getDocs(collection(db, "entities"));
 
-    querySnapshot.forEach((docSnap) => {
-  const data = docSnap.data();
+  console.log("ENTRIES FOUND:", querySnapshot.size);
 
-  const div = document.createElement("div");
-  div.className = "entry";
+  if (!querySnapshot.size) {
+    container.innerHTML = "<p>No entities found in database.</p>";
+    return;
+  }
 
-  const title = data.title || "UNTITLED ENTITY";
-  const classification = data.classification || "UNKNOWN";
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
 
-  const safeClass =
-    typeof classification === "string"
-      ? classification.toLowerCase()
-      : "unknown";
+    const div = document.createElement("div");
+    div.className = "entry";
 
-  div.innerHTML = `
-    <a href="entry.html?id=${docSnap.id}">${title}</a>
-    <span class="class ${safeClass}">${classification}</span>
-  `;
+    const title = data.title || "UNTITLED ENTITY";
+    const classification = (data.classification || "UNKNOWN").toString();
 
-  container.appendChild(div);
-});
+    const safeClass = classification.toLowerCase();
+
+    div.innerHTML = `
+      <a href="entry.html?id=${docSnap.id}">${title}</a>
+      <span class="class ${safeClass}">${classification}</span>
+    `;
+
+    container.appendChild(div);
+  });
+}
   }
 
   loadEntries();
