@@ -189,19 +189,22 @@ button:hover {
 }
 
 .redacted-normal {
-    color: #000;
     background: #111;
+    color: #111;
     padding: 0 4px;
+    border-radius: 2px;
 }
 
 .redacted-heavy {
-    color: #000;
     background: #222;
+    color: #222;
+    padding: 0 4px;
     border: 1px solid #444;
 }
 
 .redacted-cosmic {
-    color: #000;
-    background: #300;
-    text-shadow: 0 0 5px red;
+    background: black;
+    color: black;
+    text-shadow: 0 0 8px red;
+    font-weight: bold;
 }
