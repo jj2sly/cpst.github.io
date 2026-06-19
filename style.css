@@ -425,3 +425,47 @@ input[type="color"] {
     background: #111;
     cursor: pointer;
 }
+
+/* =========================================
+   ADMIN PANEL TABS
+========================================= */
+
+.tabBar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid #ffd400;
+}
+
+.tabBtn {
+    flex: 1;
+    background: #0b0b0b;
+    color: #888;
+    border: 2px solid #ffd400;
+    border-bottom: none;
+    padding: 14px 10px;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tabBtn + .tabBtn {
+    border-left: none;
+}
+
+.tabBtn:hover {
+    background: #111;
+    color: #ffd400;
+}
+
+.tabBtn.active {
+    background: #ffd400;
+    color: black;
+}
+
+.file {
+    border-top: none;
+    margin-top: 0;
+}
