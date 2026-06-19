@@ -213,6 +213,18 @@ button:hover {
     line-height: 1.6;
 }
 
+#descriptionView p,
+#containmentView p,
+#addendumView p {
+    margin: 0 0 14px 0;
+}
+
+#descriptionView p:last-child,
+#containmentView p:last-child,
+#addendumView p:last-child {
+    margin-bottom: 0;
+}
+
 #activityLog {
     margin-top: 10px;
 }
