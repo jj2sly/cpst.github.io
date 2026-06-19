@@ -25,8 +25,9 @@
     <p><span class="class neutralized">NEUTRALIZED</span> — Deceased/Irrelevant anomalies</p>
 </div>
 
-    <div class="database" id="container">
-    <h2>Entity Index</h2>
+    <div class="database">
+  <h2>Entity Index</h2>
+  <div id="container"></div>
 </div>
 
 <script type="module">
@@ -49,19 +50,27 @@
   async function loadEntries() {
     const querySnapshot = await getDocs(collection(db, "entities"));
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
+    querySnapshot.forEach((docSnap) => {
+  const data = docSnap.data();
 
-      const div = document.createElement("div");
-      div.className = "entry";
+  const div = document.createElement("div");
+  div.className = "entry";
 
-      div.innerHTML = `
-        <a href="entry.html?id=${doc.id}">${data.title}</a>
-        <span class="class ${data.classification.toLowerCase()}">${data.classification}</span>
-      `;
+  const title = data.title || "UNTITLED ENTITY";
+  const classification = data.classification || "UNKNOWN";
 
-      container.appendChild(div);
-    });
+  const safeClass =
+    typeof classification === "string"
+      ? classification.toLowerCase()
+      : "unknown";
+
+  div.innerHTML = `
+    <a href="entry.html?id=${docSnap.id}">${title}</a>
+    <span class="class ${safeClass}">${classification}</span>
+  `;
+
+  container.appendChild(div);
+});
   }
 
   loadEntries();
