@@ -8,13 +8,16 @@
 </head>
 <body>
 
-<a href="admin.html" class="adminLink">ADMIN</a>
+<a href="login.html" class="adminLink">LOGIN / SIGN UP</a>
 
 <div id="gateOverlay">
     <div id="gateContent">
         <h1 id="gateTitle">CPST DATABASE</h1>
         <p id="gateSubtitle">RESTRICTED ACCESS TERMINAL</p>
-        <button id="enterBtn">ENTER</button>
+        <div id="gateButtons">
+            <button id="enterBtn">ENTER</button>
+            <a href="login.html" id="gateLoginBtn">LOGIN / SIGN UP</a>
+        </div>
     </div>
 </div>
 
@@ -70,6 +73,7 @@ if (sessionStorage.getItem("cpstEntered") === "true") {
 }
 </script>
 
+<script type="module" src="nav-auth.js"></script>
 <script src="cornfall.js"></script>
 <script src="transitions.js"></script>
 </body>

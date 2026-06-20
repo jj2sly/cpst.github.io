@@ -1151,3 +1151,49 @@ header,
         font-size: 1rem !important;
     }
 }
+
+/* =========================================
+   GATE BUTTON ROW (Enter + Login/Sign Up)
+========================================= */
+
+#gateButtons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#gateLoginBtn {
+    font-family: 'Oswald', Arial, sans-serif;
+    background: transparent;
+    color: #888;
+    border: 2px solid #444;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    display: inline-block;
+}
+
+#gateLoginBtn:hover {
+    background: #ffd400;
+    color: black;
+    border-color: #ffd400;
+}
+
+@media (max-width: 420px) {
+    #gateButtons {
+        flex-direction: column;
+    }
+
+    #enterBtn,
+    #gateLoginBtn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
