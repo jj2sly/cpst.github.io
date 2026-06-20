@@ -914,12 +914,17 @@ html {
     }
 
     /* Form inputs go full-width for easier tapping */
-    input[type="text"],
-    input[type="color"],
+    input,
     select,
     textarea {
         width: 100%;
         font-size: 16px; /* prevents iOS auto-zoom on focus */
+        box-sizing: border-box;
+    }
+
+    /* Color pickers stay compact, not full-width */
+    input[type="color"] {
+        width: 60px;
     }
 
     /* Buttons stack more comfortably */

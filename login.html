@@ -2,32 +2,25 @@
 <html>
 <head>
     <title>CPE LOGIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <header>
     <h1>CPE ACCESS TERMINAL</h1>
     <p>AUTHORIZED PERSONNEL ONLY</p>
 </header>
-
 <div class="file">
-
     <input id="email" placeholder="iajm@cpst.net"><br><br>
     <input id="password" type="password" placeholder="???"><br><br>
-
     <button id="loginBtn">ACCESS SYSTEM</button>
-
     <p id="status"></p>
-
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
 import { setPersistence, browserLocalPersistence } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";   
     
@@ -39,39 +32,28 @@ const firebaseConfig = {
   messagingSenderId: "526427336111",
   appId: "1:526427336111:web:8b71369117416ae937d35a"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
 document.getElementById("loginBtn").addEventListener("click", async () => {
-
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-
     try {
-
         await setPersistence(auth, browserLocalPersistence);
-
-        await signInWithEmailAndPassword(auth, email, password);
-
+        const result = await signInWithEmailAndPassword(auth, email, password);
         console.log("LOGIN SUCCESS USER:", result.user);
-
         document.getElementById("status").textContent =
             "ACCESS GRANTED... redirecting";
-
         setTimeout(() => {
             window.location.href = "index.html";
         }, 500);
-
     } catch (error) {
-
         console.error(error);
-
         document.getElementById("status").textContent =
             error.code;
     }
 });
 </script>
 
+<script src="transitions.js"></script>
 </body>
 </html>
