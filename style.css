@@ -989,3 +989,97 @@ html {
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
+/* =========================================
+   ADDITIONAL MOBILE PASS
+========================================= */
+
+@media (max-width: 700px) {
+
+    /* Gate overlay content fits narrow screens without overflow */
+    #gateContent {
+        padding: 0 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #gateSubtitle {
+        font-size: 0.85rem;
+        letter-spacing: 1.5px;
+    }
+
+    #enterBtn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* Header back-link / admin badge / title don't collide on small screens */
+    header {
+        padding-top: 4px;
+    }
+
+    .adminLink {
+        top: 10px;
+        right: 10px;
+    }
+
+    /* Database list links wrap and don't get squeezed by classification badge */
+    .entry a {
+        flex: 1 1 100%;
+        word-break: break-word;
+    }
+
+    .entry .class {
+        flex: 0 0 auto;
+    }
+
+    /* Image cap height shrinks on small screens */
+    .entityImage {
+        max-height: 240px;
+    }
+
+    /* Activity log entries: tighter padding */
+    .logEntry {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Classification management rows: full-width inputs, clear stacking order */
+    #classificationList .entry {
+        gap: 8px;
+    }
+
+    .reorderBtns {
+        order: -1;
+    }
+
+    /* Admin tab content: reduce panel padding to give content more room */
+    .file {
+        padding: 14px;
+    }
+
+    .database,
+    .legend {
+        padding: 14px;
+    }
+
+    /* Back buttons full width and stacked for easy tapping */
+    .backBtn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    .entryText {
+        font-size: 0.95rem;
+    }
+
+    .class {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+}
