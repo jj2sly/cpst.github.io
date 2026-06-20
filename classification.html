@@ -46,17 +46,24 @@ async function loadClassifications() {
         }
 
         let items = [];
+        let rawIndex = 0;
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             items.push({
                 name: data.name || docSnap.id,
                 color: data.color || "#ffd400",
                 description: data.description || "",
-                order: typeof data.order === "number" ? data.order : 9999
+                order: typeof data.order === "number" ? data.order : null,
+                fallbackIndex: rawIndex
             });
+            rawIndex++;
         });
 
-        items.sort((a, b) => a.order - b.order);
+        items.sort((a, b) => {
+            const orderA = a.order !== null ? a.order : 1000 + a.fallbackIndex;
+            const orderB = b.order !== null ? b.order : 1000 + b.fallbackIndex;
+            return orderA - orderB;
+        });
 
         listDiv.innerHTML = "";
 
