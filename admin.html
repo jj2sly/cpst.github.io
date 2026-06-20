@@ -224,6 +224,7 @@ async function loadClassifications() {
 
     // Collect into an array so we can sort by order
     let items = [];
+    let rawIndex = 0;
     querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
         items.push({
@@ -231,11 +232,36 @@ async function loadClassifications() {
             name: data.name || docSnap.id,
             color: data.color || "#ffd400",
             description: data.description || "",
-            order: typeof data.order === "number" ? data.order : 9999
+            order: typeof data.order === "number" ? data.order : null,
+            fallbackIndex: rawIndex
         });
+        rawIndex++;
     });
 
-    items.sort((a, b) => a.order - b.order);
+    // Items with no order yet fall back to their original load position,
+    // so they at least have a stable (if arbitrary) starting order
+    items.sort((a, b) => {
+        const orderA = a.order !== null ? a.order : 1000 + a.fallbackIndex;
+        const orderB = b.order !== null ? b.order : 1000 + b.fallbackIndex;
+        return orderA - orderB;
+    });
+
+    // Normalize to clean sequential integers (0, 1, 2...) so future
+    // up/down swaps always have distinct values to work with. Only
+    // write to Firestore for items whose order actually needs fixing.
+    const normalizeWrites = [];
+    items.forEach((item, index) => {
+        if (item.order !== index) {
+            normalizeWrites.push(
+                updateDoc(doc(db, "classifications", item.id), { order: index })
+            );
+        }
+        item.order = index;
+    });
+
+    if (normalizeWrites.length > 0) {
+        await Promise.all(normalizeWrites);
+    }
 
     listDiv.innerHTML = "";
     artClassSelect.innerHTML = "";
