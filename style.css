@@ -847,3 +847,145 @@ html {
         margin-bottom: 16px;
     }
 }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 14px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    /* Headers scale down so they don't overflow on small screens */
+    #number {
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    #title {
+        font-size: 1.2rem;
+    }
+
+    h2 {
+        font-size: 1.05rem;
+    }
+
+    /* Classification/containment stamp badges stack instead of crowding */
+    #classTag,
+    #containmentTag {
+        display: block;
+        width: fit-content;
+        margin-bottom: 6px;
+    }
+
+    /* Tab bar wraps to two rows instead of squeezing labels */
+    .tabBar {
+        flex-wrap: wrap;
+    }
+
+    .tabBtn {
+        flex: 1 1 50%;
+        font-size: 0.75rem;
+        padding: 10px 6px;
+    }
+
+    /* Database entry rows: allow wrapping instead of overflowing */
+    .entry {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    #classificationList .entry {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #classificationList input[type="text"],
+    #classificationList input[type="color"] {
+        width: 100%;
+    }
+
+    /* Form inputs go full-width for easier tapping */
+    input[type="text"],
+    input[type="color"],
+    select,
+    textarea {
+        width: 100%;
+        font-size: 16px; /* prevents iOS auto-zoom on focus */
+    }
+
+    /* Buttons stack more comfortably */
+    button {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+        width: 100%;
+        margin: 6px 0;
+    }
+
+    .saveClassBtn,
+    .deleteClassBtn,
+    .reorderBtns button {
+        width: auto;
+    }
+
+    .reorderBtns {
+        flex-direction: row;
+    }
+
+    /* Gate overlay button and title fit smaller screens */
+    #gateTitle {
+        font-size: 1.6rem;
+    }
+
+    #enterBtn {
+        padding: 12px 30px;
+        font-size: 0.95rem;
+    }
+
+    /* Admin badge moves inline on mobile (already handled, reaffirm spacing) */
+    .adminLink {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+    }
+
+    /* Sort dropdown takes full width for easier tapping */
+    #sortSelect {
+        width: 100%;
+        margin-top: 6px;
+    }
+}
+
+@media (max-width: 420px) {
+    #number {
+        font-size: 1.3rem;
+    }
+
+    header h1 {
+        font-size: 1.4rem;
+    }
+
+    .tabBtn {
+        flex: 1 1 100%;
+    }
+}
+
+/* =========================================
+   PAGE TRANSITIONS
+========================================= */
+
+.page-exit {
+    animation: pageFadeOut 0.25s ease forwards;
+}
+
+@keyframes pageFadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
