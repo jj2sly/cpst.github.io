@@ -788,3 +788,17 @@ header p {
 html {
     scroll-behavior: smooth;
 }
+
+/* =========================================
+   SORT DROPDOWN ON INDEX PAGES
+========================================= */
+
+#sortSelect {
+    background: #111;
+    color: #ffd400;
+    border: 2px solid #ffd400;
+    padding: 6px 10px;
+    font-family: 'Oswald', Arial, sans-serif;
+    width: auto;
+    display: inline-block;
+}
