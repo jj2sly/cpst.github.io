@@ -1088,3 +1088,67 @@ html {
         padding: 3px 8px;
     }
 }
+
+/* =========================================
+   AMBIENT CORN FALL EFFECT
+========================================= */
+
+#cornFallContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cornParticle {
+    position: absolute;
+    top: -40px;
+    opacity: 0.35;
+    filter: drop-shadow(0 0 4px rgba(255, 212, 0, 0.15));
+    animation-name: cornFall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    will-change: transform, opacity;
+}
+
+@keyframes cornFall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.35;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(110vh) translateX(var(--drift)) rotate(var(--spin));
+        opacity: 0;
+    }
+}
+
+/* Keep actual page content above the corn layer */
+header,
+.file,
+.database,
+.legend,
+.warning,
+.adminLink,
+#gateOverlay,
+#mainContent,
+.backBtn {
+    position: relative;
+    z-index: 2;
+}
+
+/* Reduce particle frequency visually on small screens via smaller size cap */
+@media (max-width: 600px) {
+    .cornParticle {
+        font-size: 1rem !important;
+    }
+}
