@@ -222,31 +222,45 @@ async function loadClassifications() {
         return;
     }
 
+    // Collect into an array so we can sort by order
+    let items = [];
+    querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        items.push({
+            id: docSnap.id,
+            name: data.name || docSnap.id,
+            color: data.color || "#ffd400",
+            description: data.description || "",
+            order: typeof data.order === "number" ? data.order : 9999
+        });
+    });
+
+    items.sort((a, b) => a.order - b.order);
+
     listDiv.innerHTML = "";
     artClassSelect.innerHTML = "";
 
-    querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const name = data.name || docSnap.id;
-        const color = data.color || "#ffd400";
-        const description = data.description || "";
-
+    items.forEach((item, index) => {
         // Row in management list
         const row = document.createElement("div");
         row.className = "entry";
         row.innerHTML = `
-            <span class="class" style="background:${color}; color:#000;">${name}</span>
-            <input type="text" value="${description}" data-id="${docSnap.id}" class="classDescInput" placeholder="Description" style="flex:1; min-width:150px;">
-            <input type="color" value="${color}" data-id="${docSnap.id}" class="classColorInput">
-            <button data-id="${docSnap.id}" class="saveClassBtn">SAVE</button>
-            <button data-id="${docSnap.id}" class="deleteClassBtn">DELETE</button>
+            <div class="reorderBtns">
+                <button data-id="${item.id}" data-index="${index}" class="moveUpBtn" ${index === 0 ? "disabled" : ""}>▲</button>
+                <button data-id="${item.id}" data-index="${index}" class="moveDownBtn" ${index === items.length - 1 ? "disabled" : ""}>▼</button>
+            </div>
+            <span class="class" style="background:${item.color}; color:#000;">${item.name}</span>
+            <input type="text" value="${item.description}" data-id="${item.id}" class="classDescInput" placeholder="Description" style="flex:1; min-width:150px;">
+            <input type="color" value="${item.color}" data-id="${item.id}" class="classColorInput">
+            <button data-id="${item.id}" class="saveClassBtn">SAVE</button>
+            <button data-id="${item.id}" class="deleteClassBtn">DELETE</button>
         `;
         listDiv.appendChild(row);
 
         // Option in artifact classification dropdown
         const opt = document.createElement("option");
-        opt.value = name;
-        opt.textContent = name;
+        opt.value = item.name;
+        opt.textContent = item.name;
         artClassSelect.appendChild(opt);
     });
 
@@ -287,6 +301,34 @@ async function loadClassifications() {
             loadClassifications();
         });
     });
+
+    // Wire up reorder buttons
+    document.querySelectorAll(".moveUpBtn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const index = parseInt(btn.getAttribute("data-index"), 10);
+            if (index === 0) return;
+            await swapOrder(items[index], items[index - 1]);
+        });
+    });
+
+    document.querySelectorAll(".moveDownBtn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const index = parseInt(btn.getAttribute("data-index"), 10);
+            if (index === items.length - 1) return;
+            await swapOrder(items[index], items[index + 1]);
+        });
+    });
+}
+
+async function swapOrder(itemA, itemB) {
+    // Normalize order values (in case of ties/defaults) then swap them
+    const orderA = itemA.order;
+    const orderB = itemB.order;
+
+    await updateDoc(doc(db, "classifications", itemA.id), { order: orderB });
+    await updateDoc(doc(db, "classifications", itemB.id), { order: orderA });
+
+    loadClassifications();
 }
 
 document.getElementById("addClassBtn").addEventListener("click", async () => {
@@ -306,10 +348,20 @@ document.getElementById("addClassBtn").addEventListener("click", async () => {
 
     const docId = classNameToDocId(name);
 
+    // Figure out the next order number (append to the end of the list)
+    const existing = await getDocs(collection(db, "classifications"));
+    let maxOrder = -1;
+    existing.forEach((docSnap) => {
+        const data = docSnap.data();
+        const ord = typeof data.order === "number" ? data.order : 0;
+        if (ord > maxOrder) maxOrder = ord;
+    });
+
     await setDoc(doc(db, "classifications", docId), {
         name: name,
         description: description,
-        color: color
+        color: color,
+        order: maxOrder + 1
     });
 
     document.getElementById("classStatus").textContent =
